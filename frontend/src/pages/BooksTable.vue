@@ -19,8 +19,8 @@
       @submit="handleSubmit"
       @cancel="handleCancel"
     />
-    <q-table v-if="props.books"
-      :rows="props.books"
+    <q-table v-if="booksStore.books"
+      :rows="booksStore.books"
       :columns="columns"
       row-key="id"
       @row-click="handleRowClick"
@@ -29,23 +29,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineEmits} from 'vue';
+import { ref } from 'vue';
 import BookCardComponent from '../components/BookCardComponent.vue';
 import { Book } from '../components/models';
+import { useBooksStore } from '../stores/booksStore';
 import { QTableColumn } from 'quasar';
 import axios from 'axios';
-import { useBooksStore } from '../stores/booksStore';
 
-const props = withDefaults(defineProps<{ books: Book[] }>(), {});
 const columns: QTableColumn[] = [
   { name: 'id', label: 'ID', align: 'left', field: 'id', sortable: true },
   { name: 'title', label: 'Title', align: 'left', field: 'title', sortable: true },
 ];
-
-const emit = defineEmits<{
-  (e: 'submit', book: Book): void;
-  (e: 'cancel'): void;
-}>();
 
 let seeComponent = ref(false);
 const isEditing = ref(false);
@@ -58,13 +52,14 @@ function handleRowClick(evt: Event, row: Book) {
   isEditing.value = true;
 }
 
+const booksStore = useBooksStore();
+
 function handleCancel() {
   seeComponent.value = false;
   currentBook = ref<Book>();
 }
 
-const booksStore = useBooksStore();
-const books = ref<Book[]>();
+
 async function handleSubmit(book: Book) {
   try {
     if (isEditing.value) {
@@ -75,7 +70,6 @@ async function handleSubmit(book: Book) {
     seeComponent.value = false;
     currentBook = ref<Book>();
     await booksStore.fetchBooks();
-    books.value = booksStore.$state.books;
   } catch (error) {
     console.error(error);
   }
@@ -86,7 +80,6 @@ async function handleDelete(book: Book){
     seeComponent.value = false;
     currentBook = ref<Book>();
     await booksStore.fetchBooks();
-    books.value = booksStore.$state.books;
   } catch (error) {
     console.error(error);
   }

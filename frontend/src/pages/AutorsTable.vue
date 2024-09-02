@@ -1,7 +1,7 @@
 <template>
     <q-page>
-      <q-table v-if="props.authors"
-        :rows="props.authors"
+      <q-table
+        :rows="authorStore.authors"
         :columns="columns"
         row-key="id"
       />
@@ -10,12 +10,9 @@
   
   <script setup lang="ts">
 import { QTableColumn } from 'quasar';
-import {Author} from '../components/models'
-interface Props {
-  authors: Author[];
-}; 
-const props = withDefaults(defineProps<Props>(), {
-});
+import { useAuthorStore } from 'src/stores/authorsStore';
+
+const authorStore = useAuthorStore();
 const columns: QTableColumn[] = [
   { name: 'id', label: 'ID', align: 'left', field: 'id', sortable: true },
   { name: 'name', label: 'Name', align: 'left', field: 'name', sortable: true },

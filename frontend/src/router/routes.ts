@@ -15,7 +15,8 @@ const routes: RouteRecordRaw[] = [
       { path: 'authors', component: () => import('pages/AuthorsTable.vue'), name: 'Authors',
         props: () => ({
           authors: useAuthorStore().authors
-        })  }
+        })  
+      }
     ],
   },
 
