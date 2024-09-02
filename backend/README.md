@@ -1,15 +1,3 @@
-# Elysia with Bun runtime
+Crear variable de entorno .env con el siguiente formato:
 
-## Getting Started
-To get started with this template, simply paste this command into your terminal:
-```bash
-bun create elysia ./elysia-example
-```
-
-## Development
-To start the development server run:
-```bash
-bun run dev
-```
-
-Open http://localhost:3000/ with your browser to see the result.
+DB_CONFIG=postgresql://(nombre del usuario de postgresql, por defecto postgres):(contraseña del usuario)@localhost:(puerto de postgreSQL, por defecto 5432)/(nombre de la bdd)
