@@ -1,3 +1,5 @@
+import { useAuthorStore } from 'src/stores/authorsStore';
+import { useBooksStore } from 'src/stores/booksStore';
 import { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
@@ -5,8 +7,15 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/BooksTable.vue'), name: 'Books' },
-      { path: 'authors', component: () => import('pages/AuthorsTable.vue'), name: 'Authors' }
+      { path: '', component: () => import('pages/BooksTable.vue'), name: 'Books',
+        props: () => ({
+          books: useBooksStore().books
+        }) 
+      },
+      { path: 'authors', component: () => import('pages/AuthorsTable.vue'), name: 'Authors',
+        props: () => ({
+          authors: useAuthorStore().authors
+        })  }
     ],
   },
 

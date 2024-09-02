@@ -31,15 +31,13 @@
         <EssentialLink
           v-for="link in linksList"
           :key="link.title"
-          :author="authors"
-          :book="books"
           v-bind="link"
         />
       </q-list>
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <router-view/>
     </q-page-container>
   </q-layout>
 </template>
@@ -56,7 +54,6 @@ defineOptions({
 });
 
 const leftDrawerOpen = ref(false);
-
 function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
@@ -84,6 +81,4 @@ onBeforeMount(async () => {
   await authorsStore.fetchAuthors();
   authors.value = authorsStore.$state.authors;
 });
-console.log(books.value)
-console.log(authors.value)
 </script>
