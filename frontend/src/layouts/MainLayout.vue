@@ -10,12 +10,9 @@
           aria-label="Menu"
           @click="toggleLeftDrawer"
         />
-
         <q-toolbar-title>
-          Quasar App
+          Full-Stack Project CRUD Libros y Autores
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -28,12 +25,14 @@
         <q-item-label
           header
         >
-          Essential Links
+          CRUD
         </q-item-label>
 
         <EssentialLink
           v-for="link in linksList"
           :key="link.title"
+          :author="authors"
+          :book="books"
           v-bind="link"
         />
       </q-list>
@@ -46,61 +45,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
+import { onBeforeMount, ref} from 'vue';
+import { useAuthorStore } from '../stores/authorsStore';
+import { Author, Book } from '../components/models';
+import { useBooksStore } from '../stores/booksStore';
 
 defineOptions({
   name: 'MainLayout'
 });
-
-const linksList: EssentialLinkProps[] = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-];
 
 const leftDrawerOpen = ref(false);
 
 function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
+const linksList: EssentialLinkProps[] = [
+  {
+    title: 'Libros',
+    caption: 'Lista de libros',
+    icon: 'book',
+    link: 'books'
+  },
+  {
+    title: 'Autores',
+    caption: 'Lista de autores',
+    icon: 'person',
+    link: 'authors'
+  }
+];
+const authorsStore = useAuthorStore();
+const authors = ref<Author[]>([]);
+const booksStore = useBooksStore();
+const books = ref<Book[]>([]);
+onBeforeMount(async () => {
+  await booksStore.fetchBooks();
+  books.value = booksStore.$state.books;
+  await authorsStore.fetchAuthors();
+  authors.value = authorsStore.$state.authors;
+});
+console.log(books.value)
+console.log(authors.value)
 </script>

@@ -6,8 +6,12 @@ import {
 import { 
     createAuthor, getAuthorById, getAllAuthors, updateAuthor, deleteAuthor 
 } from './objects/authors';
+import { getAllRelationships } from './objects/author_books';
+import cors from '@elysiajs/cors';
 
 const app = new Elysia();
+
+app.use(cors());
 
 app.get('/', () => ({
   message: 'Bienvenido a la API de CRUD libros y autores',
@@ -168,6 +172,16 @@ app.delete('/book/:bookId/author/:authorId',
     }
   }
 );
+
+app.get('/relationships', async () => {
+  try {
+    return await getAllRelationships();
+  } catch (error) {
+    console.error('Error al obtener todas las relaciones:', error);
+    return { error: 'Error al obtener todas las relaciones' };
+  }
+});
+
 app.listen(3000, () => {
   console.log(`🦊 Elysia is running at http://localhost:3000`);
 });
