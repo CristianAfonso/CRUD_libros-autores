@@ -36,6 +36,8 @@ import { useBooksStore } from '../stores/booksStore';
 import { QTableColumn } from 'quasar';
 import axios from 'axios';
 
+const booksStore = useBooksStore();
+
 const columns: QTableColumn[] = [
   { name: 'id', label: 'ID', align: 'left', field: 'id', sortable: true },
   { name: 'title', label: 'Title', align: 'left', field: 'title', sortable: true },
@@ -46,19 +48,10 @@ const isEditing = ref(false);
 let currentBook = ref<Book>();
 
 function handleRowClick(evt: Event, row: Book) {
-  console.log(row)
   seeComponent.value = true;
   currentBook.value = row;
   isEditing.value = true;
 }
-
-const booksStore = useBooksStore();
-
-function handleCancel() {
-  seeComponent.value = false;
-  currentBook = ref<Book>();
-}
-
 
 async function handleSubmit(book: Book) {
   try {
@@ -67,9 +60,7 @@ async function handleSubmit(book: Book) {
     } else {
       await axios.post('http://localhost:3000/books', book);
     }
-    seeComponent.value = false;
-    currentBook = ref<Book>();
-    await booksStore.fetchBooks();
+    handleClose();
   } catch (error) {
     console.error(error);
   }
@@ -77,11 +68,18 @@ async function handleSubmit(book: Book) {
 async function handleDelete(book: Book){
   try{
     await axios.delete(`http://localhost:3000/books/${book.id}`);
-    seeComponent.value = false;
-    currentBook = ref<Book>();
-    await booksStore.fetchBooks();
+    handleClose();
   } catch (error) {
     console.error(error);
   }
+}
+function handleCancel() {
+  seeComponent.value = false;
+  isEditing.value = false;
+  currentBook = ref<Book>();
+}
+async function handleClose(){
+  handleCancel();
+  await booksStore.fetchBooks();
 }
 </script>
