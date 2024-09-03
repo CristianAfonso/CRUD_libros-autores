@@ -1,12 +1,11 @@
 import { Elysia, t } from 'elysia';
 import { 
-    createBook, getBookById, getAllBooks, updateBook, deleteBook, addAuthorToBook , getAuthorsOfBook,
-    deleteAuthorFromBook
+    createBook, getBookById, getAllBooks, updateBook, deleteBook
 } from './objects/books';
 import { 
     createAuthor, getAuthorById, getAllAuthors, updateAuthor, deleteAuthor 
 } from './objects/authors';
-import { getAllRelationships } from './objects/author_books';
+import { getAllRelationships, addAuthorToBook , getAuthorsOfBook,  deleteAuthorFromBook } from './objects/author_books';
 import cors from '@elysiajs/cors';
 
 const app = new Elysia();

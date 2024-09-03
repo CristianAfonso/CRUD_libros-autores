@@ -57,35 +57,3 @@ export async function deleteBook(book_id: number): Promise<void> {
     }
 }
 
-export async function addAuthorToBook(book_id: number, author_id: number): Promise<void> {
-    try {
-        await db.insert(book_author).values({ book_id, author_id });
-    } catch (error) {
-        console.error('Error al asociar el autor con el libro:', error);
-        throw new Error('Error al asociar el autor con el libro');
-    }
-}
-export async function deleteAuthorFromBook(book_id: number, author_id: number): Promise<void> {
-    try {
-        const result = await db.delete(book_author)
-            .where(eq(book_author.book_id, book_id) && eq(book_author.author_id, author_id))
-    if (result.count === 0) {
-        throw new Error('Relación entre el libro y el autor no encontrada');
-    }
-    } catch (error) {
-        console.error('Error al asociar el autor con el libro:', error);
-        throw new Error('Error al asociar el autor con el libro');
-    }
-}
-export async function getAuthorsOfBook(book_id: number) {
-    try {
-        return await db.select()
-            .from(book_author)
-            .leftJoin(author, eq(book_author.author_id, author.id))
-            .leftJoin(book, eq(book_author.book_id, book.id))
-            .where(eq(book.id, book_id));
-    } catch (error) {
-        console.error('Error al obtener autores del libro:', error);
-        throw new Error('Error al obtener autores del libro');
-    }
-}
