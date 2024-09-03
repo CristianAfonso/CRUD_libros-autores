@@ -5,3 +5,6 @@ Es necesario leer el archivo readme.md de la carpeta Backend.
 Iniciar el frontend desde la carpeta correspondiente con: quasar dev
 Iniciar el backend desde la carpeta correspondiente con: bun runs rc/index.ts
 
+-------
+
+La rama del repositorio que implementa las funcionalidades al completo es post-entrega: https://github.com/CristianAfonso/CRUD_libros-autores/tree/post-entrega
