@@ -20,7 +20,7 @@
       @cancel="handleCancel"
     />
     <q-table
-      :rows="authorStore.authors"
+      :rows="authorsStore.authors"
       :columns="columns"
       row-key="id"
       @row-click="handleRowClick"
@@ -32,15 +32,33 @@
 import { ref } from 'vue';
 import AuthorCardComponent from '../components/AuthorCardComponent.vue';
 import { Author } from '../components/models';
+import { useBooksStore } from '../stores/booksStore';
 import { useAuthorStore } from '../stores/authorsStore';
+import { useAuthorBookStore } from '../stores/authors_booksStore';
 import { QTableColumn } from 'quasar';
 import api from 'axios';
 
-const authorStore = useAuthorStore();
+const booksStore = useBooksStore();
+const authorsStore = useAuthorStore();
+const authorsBooksStore = useAuthorBookStore();
 
 const columns: QTableColumn[] = [
   { name: 'id', label: 'ID', align: 'left', field: 'id', sortable: true },
   { name: 'name', label: 'Name', align: 'left', field: 'name', sortable: true },
+  {  name: 'books', label: 'Libro(s)', align: 'left', 
+      field: (row: Author) => {
+        return booksStore.books
+             ?.map(book => {
+               const authorBookRelation = authorsBooksStore.author_book.find(
+                 (author_book) => author_book.book_id === row.id && author_book.author_id === book.id
+               );
+
+               return authorBookRelation ? book.title : undefined;
+             })
+             .filter((title): title is string => title !== undefined)
+             .join(', ') || 'Sin libros';
+      }
+  }
 ];
 
 let seeComponent = ref(false);
@@ -80,7 +98,7 @@ function handleCancel() {
 }
 async function handleClose(){
   handleCancel();
-  await authorStore.fetchAuthors();
+  await authorsStore.fetchAuthors();
 }
 
 </script>

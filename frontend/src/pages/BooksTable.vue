@@ -33,14 +33,32 @@ import { ref } from 'vue';
 import BookCardComponent from '../components/BookCardComponent.vue';
 import { Book } from '../components/models';
 import { useBooksStore } from '../stores/booksStore';
+import { useAuthorStore } from '../stores/authorsStore';
+import { useAuthorBookStore } from '../stores/authors_booksStore';
 import { QTableColumn } from 'quasar';
 import api from 'axios';
 
 const booksStore = useBooksStore();
+const authorsStore = useAuthorStore();
+const authorsBooksStore = useAuthorBookStore();
 
 const columns: QTableColumn[] = [
   { name: 'id', label: 'ID', align: 'left', field: 'id', sortable: true },
-  { name: 'title', label: 'Title', align: 'left', field: 'title', sortable: true },
+  { name: 'title', label: 'Título', align: 'left', field: 'title', sortable: true },
+  {  name: 'authors', label: 'Autor(es)', align: 'left', 
+      field: (row: Book) => {
+        return authorsStore.authors
+             ?.map(author => {
+               const authorBookRelation = authorsBooksStore.author_book.find(
+                 (author_book) => author_book.book_id === row.id && author_book.author_id === author.id
+               );
+
+               return authorBookRelation ? author.name : undefined;
+             })
+             .filter((name): name is string => name !== undefined)
+             .join(', ') || 'Anónimo';
+      }
+  }
 ];
 
 let seeComponent = ref(false);
