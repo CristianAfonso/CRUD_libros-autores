@@ -11,6 +11,6 @@ export const book = pgTable("books", {
 });
 
 export const book_author = pgTable("book_author", {
-    bookId: integer("book_id").notNull().references(() => book.id),
-    authorId: integer("author_id").notNull().references(() => author.id),
+    book_id: integer("book_id").notNull().references(() => book.id),
+    author_id: integer("author_id").notNull().references(() => author.id),
 });

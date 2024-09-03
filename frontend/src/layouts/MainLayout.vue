@@ -45,10 +45,10 @@
 <script setup lang="ts">
 import EssentialLink, { EssentialLinkProps } from 'components/EssentialLink.vue';
 import { onBeforeMount, ref} from 'vue';
-import { useAuthorStore } from '../stores/authorsStore';
-import { Author, Book } from '../components/models';
+import { Author, Book, AuthorBook } from '../components/models';
 import { useBooksStore } from '../stores/booksStore';
-import api from 'axios'
+import { useAuthorStore } from '../stores/authorsStore';
+import { useAuthorBookStore } from '../stores/authors_booksStore';
 
 defineOptions({
   name: 'MainLayout'
@@ -73,14 +73,17 @@ const authorsStore = useAuthorStore();
 const authors = ref<Author[]>([]);
 const booksStore = useBooksStore();
 const books = ref<Book[]>([]);
+const authorBookStore = useAuthorBookStore();
+const author_book = ref<AuthorBook[]>([]);
 function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 onBeforeMount(async () => {
-  console.log(api)
   await booksStore.fetchBooks();
   books.value = booksStore.books;
   await authorsStore.fetchAuthors();
   authors.value = authorsStore.authors;
+  await authorBookStore.fetchAuthors();
+  author_book.value = authorBookStore.author_book;
 });
 </script>

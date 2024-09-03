@@ -150,10 +150,10 @@ app.delete('/authors/:id', async ({ params: { id } }) => {
   }
 });
 
-app.post('/book/:bookId/author/:authorId', 
-  async ({ params: { bookId, authorId } }) => {
+app.post('/book/:book_id/author/:author_id', 
+  async ({ params: { book_id, author_id } }) => {
     try {
-      await addAuthorToBook(Number(bookId), Number(authorId));
+      await addAuthorToBook(Number(book_id), Number(author_id));
       return { message: 'Autor asociado al libro con éxito' };
     } catch (error) {
       console.error('Error al asociar el autor con el libro:', error);
@@ -161,10 +161,10 @@ app.post('/book/:bookId/author/:authorId',
     }
   }
 );
-app.delete('/book/:bookId/author/:authorId', 
-  async ({ params: { bookId, authorId } }) => {
+app.delete('/book/:book_id/author/:author_id', 
+  async ({ params: { book_id, author_id } }) => {
   try {
-      await deleteAuthorFromBook(Number(bookId), Number(authorId));
+      await deleteAuthorFromBook(Number(book_id), Number(author_id));
       return { message: 'Asociación entre autor y libro eliminada con éxito' };
     } catch (error) {
       console.error('Error al eliminar la asociación entre el autor y el libro:', error);

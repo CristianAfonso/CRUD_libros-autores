@@ -11,9 +11,9 @@ export async function createAuthor(name: string): Promise<void> {
     }
 }
 
-export async function getAuthorById(authorId: number) {
+export async function getAuthorById(author_id: number) {
     try {
-        const result = await db.select().from(author).where(eq(author.id, authorId));
+        const result = await db.select().from(author).where(eq(author.id, author_id));
         if (!result) {
             throw new Error('Autor no encontrado');
         }
@@ -33,9 +33,9 @@ export async function getAllAuthors() {
     }
 }
 
-export async function updateAuthor(authorId: number, newTitle: string): Promise<void> {
+export async function updateAuthor(author_id: number, newTitle: string): Promise<void> {
     try {
-        const result = await db.update(author).set({ name: newTitle }).where(eq(author.id, authorId));
+        const result = await db.update(author).set({ name: newTitle }).where(eq(author.id, author_id));
         if (result.count === 0) {
             throw new Error('Autor no encontrado para actualizar');
         }
@@ -45,9 +45,9 @@ export async function updateAuthor(authorId: number, newTitle: string): Promise<
     }
 }
 
-export async function deleteAuthor(authorId: number): Promise<void> {
+export async function deleteAuthor(author_id: number): Promise<void> {
     try {
-        const result = await db.delete(author).where(eq(author.id, authorId));
+        const result = await db.delete(author).where(eq(author.id, author_id));
         if (result.count === 0) {
             throw new Error('Autor no encontrado para eliminar');
         }

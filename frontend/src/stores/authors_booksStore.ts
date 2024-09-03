@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import api from 'axios';
 import { AuthorBook, AuthorBookState } from 'src/components/models';
 
-export const useAuthorStore = defineStore('authors', {
+export const useAuthorBookStore = defineStore('book_author', {
   state: (): AuthorBookState => ({
     author_book: [],
     loading: false,
@@ -14,10 +14,10 @@ export const useAuthorStore = defineStore('authors', {
       this.error = null;
 
       try {
-        const response = await api.get<AuthorBook[]>('http://localhost:3000/relationships');
+        const response = await api.get<AuthorBook[]>('/relationships');
         this.author_book = response.data;
       } catch (err) {
-        this.error = 'Error al cargar los autores';
+        this.error = 'Error al cargar las relaciones';
         console.error(err);
       } finally {
         this.loading = false;

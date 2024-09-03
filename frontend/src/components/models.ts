@@ -22,7 +22,7 @@ export interface AuthorState {
 
 export interface AuthorBook{
   book_id: number;
-  author_ir: number;
+  author_id: number;
 }
 
 export interface AuthorBookState{
