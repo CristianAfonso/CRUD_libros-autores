@@ -157,7 +157,7 @@ app.post('/book/:book_id/author/:author_id',
       return { message: 'Autor asociado al libro con éxito' };
     } catch (error) {
       console.error('Error al asociar el autor con el libro:', error);
-      return { error: 'Error al asociar el autor con el libro' };
+      return { error: 'Error al asociar el autor con el libro ' + error };
     }
   }
 );

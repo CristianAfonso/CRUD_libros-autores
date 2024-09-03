@@ -83,7 +83,7 @@ onBeforeMount(async () => {
   books.value = booksStore.books;
   await authorsStore.fetchAuthors();
   authors.value = authorsStore.authors;
-  await authorBookStore.fetchAuthors();
+  await authorBookStore.fetchAuthorsBooks();
   author_book.value = authorBookStore.author_book;
 });
 </script>

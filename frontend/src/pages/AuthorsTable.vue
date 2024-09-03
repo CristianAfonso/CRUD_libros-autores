@@ -50,7 +50,7 @@ const columns: QTableColumn[] = [
         return booksStore.books
              ?.map(book => {
                const authorBookRelation = authorsBooksStore.author_book.find(
-                 (author_book) => author_book.book_id === row.id && author_book.author_id === book.id
+                 (author_book) => author_book.author_id === row.id && author_book.book_id === book.id
                );
 
                return authorBookRelation ? book.title : undefined;

@@ -9,7 +9,7 @@ export const useAuthorBookStore = defineStore('book_author', {
     error: null,
   }),
   actions: {
-    async fetchAuthors() {
+    async fetchAuthorsBooks() {
       this.loading = true;
       this.error = null;
 

@@ -1,23 +1,26 @@
 <template>
   <q-page>
     <q-btn
-      v-if="!seeComponent"
-      @click="seeComponent = true"
+      v-if="!editBook"
+      @click="editBook = true"
       label="Nuevo Libro"
       color="primary"
       style="margin: 25px;"
     />
+    <BooksAuthorsCardComponent 
+      v-if="changeAuthor"
+      :book="currentBook"
+      :isAdding="isAdding"
+      @submit="handleSubmitNewAuthor"
+      @cancel="handleCancel"
+      @delete="handleDeleteAuthor"
+    />
     <BookCardComponent
-      v-if="isEditing && seeComponent"
+      v-if="editBook"
       :book="currentBook"
       @submit="handleSubmit"
       @cancel="handleCancel"
       @delete="handleDelete"
-    />
-    <BookCardComponent
-      v-else-if="seeComponent"
-      @submit="handleSubmit"
-      @cancel="handleCancel"
     />
     <q-table
       v-if="booksStore.books"
@@ -28,8 +31,8 @@
     >
       <template v-slot:body-cell-actions="props">
         <q-td :props="props">
-          <q-btn color="green" icon="add" @click.stop="console.log('Añadir nuevo autor a ' + props.row.title)"></q-btn>
-          <q-btn color="red" icon="remove" @click.stop="console.log('Eliminar un autor de ' + props.row.title)" style="margin-left: 10px;"></q-btn>
+          <q-btn color="green" icon="add" @click.stop="handleAddAuthor(props.row)"></q-btn>
+          <q-btn color="red" icon="remove" @click.stop="handleRemoveAuthor(props.row)" style="margin-left: 10px;"></q-btn>
         </q-td>
       </template>
     </q-table>
@@ -39,7 +42,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import BookCardComponent from '../components/BookCardComponent.vue';
-import { Book } from '../components/models';
+import BooksAuthorsCardComponent from '../components/BooksAuthorsCardComponent.vue'
+import { AuthorBook, Book } from '../components/models';
 import { useBooksStore } from '../stores/booksStore';
 import { useAuthorStore } from '../stores/authorsStore';
 import { useAuthorBookStore } from '../stores/authors_booksStore';
@@ -71,14 +75,29 @@ const columns: QTableColumn[] = [
   { name: 'actions', align: 'center',  label: 'Acciones con autores',  field: ''},
 ];
 
-let seeComponent = ref(false);
+let editBook = ref(false);
+let changeAuthor = ref(false);
 const isEditing = ref(false);
+const isAdding = ref(false);
+
 let currentBook = ref<Book>();
 
 function handleRowClick(evt: Event, row: Book) {
-  seeComponent.value = true;
+  editBook.value = true;
   currentBook.value = row;
   isEditing.value = true;
+}
+
+function handleAddAuthor(book: Book){
+  currentBook.value = book;
+  isAdding.value = true;
+  changeAuthor.value = true;
+}
+
+function handleRemoveAuthor(book: Book){
+  currentBook.value = book;
+  isAdding.value = false;
+  changeAuthor.value = true;
 }
 
 async function handleSubmit(book: Book) {
@@ -101,13 +120,34 @@ async function handleDelete(book: Book){
     console.error(error);
   }
 }
+async function handleSubmitNewAuthor(author_book: AuthorBook) {
+  
+  try{
+    console.log(`/book/${author_book.book_id}/author/${author_book.author_id}/`)
+    await api.post(`/book/${author_book.book_id}/author/${author_book.author_id}/`);
+    handleClose();
+  } catch (error) {
+    console.error(error);
+  }
+}
+async function handleDeleteAuthor(author_book: AuthorBook) {
+  try{
+    await api.delete(`/book/${author_book.book_id}/author/${author_book.author_id}/`);
+    handleClose();
+  } catch (error) {
+    console.error(error);
+  }
+}
 function handleCancel() {
-  seeComponent.value = false;
+  editBook.value = false;
   isEditing.value = false;
+  isAdding.value = false;
+  changeAuthor.value = false;
   currentBook = ref<Book>();
 }
 async function handleClose(){
   handleCancel();
   await booksStore.fetchBooks();
+  await authorsBooksStore.fetchAuthorsBooks();
 }
 </script>
