@@ -18,7 +18,6 @@ export const useAuthorStore = defineStore('authors', {
         this.authors = response.data;
       } catch (err) {
         this.error = 'Error al cargar los autores';
-        console.error(err);
       } finally {
         this.loading = false;
       }

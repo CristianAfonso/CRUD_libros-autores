@@ -2,7 +2,7 @@
   <q-item
     clickable
     tag="a"
-    :href="link"
+    :to="link"
   >
     <q-item-section
       v-if="icon"
@@ -32,7 +32,7 @@ export interface EssentialLinkProps {
 
 withDefaults(defineProps<EssentialLinkProps>(), {
   caption: '',
-  link: '#',
+  link: '',
   icon: '',
 });
 </script>

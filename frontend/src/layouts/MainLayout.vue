@@ -54,31 +54,31 @@ defineOptions({
 });
 
 const leftDrawerOpen = ref(false);
-function toggleLeftDrawer () {
-  leftDrawerOpen.value = !leftDrawerOpen.value;
-}
 const linksList: EssentialLinkProps[] = [
   {
     title: 'Libros',
     caption: 'Lista de libros',
     icon: 'book',
-    link: 'books'
+    link: '/books'
   },
   {
     title: 'Autores',
     caption: 'Lista de autores',
     icon: 'person',
-    link: 'authors'
+    link: '/authors'
   }
 ];
 const authorsStore = useAuthorStore();
 const authors = ref<Author[]>([]);
 const booksStore = useBooksStore();
 const books = ref<Book[]>([]);
+function toggleLeftDrawer () {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
 onBeforeMount(async () => {
   await booksStore.fetchBooks();
-  books.value = booksStore.$state.books;
+  books.value = booksStore.books;
   await authorsStore.fetchAuthors();
-  authors.value = authorsStore.$state.authors;
+  authors.value = authorsStore.authors;
 });
 </script>

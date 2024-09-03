@@ -1,7 +1,7 @@
 <template>
   <q-card>
     <q-card-section>
-      <div class="text-h6">{{ isEditMode ? 'Edit Book' : 'Create Book' }}</div>
+      <div class="text-h6">{{ isEditMode ? 'Editar Libro' : 'Crear Libro' }}</div>
     </q-card-section>
 
     <q-card-section>

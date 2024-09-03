@@ -18,7 +18,6 @@ export const useBooksStore = defineStore('books', {
         this.books = response.data;
       } catch (err) {
         this.error = 'Error al cargar los libros';
-        console.error(err);
       } finally {
         this.loading = false;
       }
