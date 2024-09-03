@@ -5,7 +5,7 @@
           @click="seeComponent = true"
           label="Nuevo Autor"
           color="primary"
-          flat
+          style="margin: 25px;"
         />
     <AuthorCardComponent
       v-if="isEditing && seeComponent"
@@ -43,9 +43,9 @@ const authorsStore = useAuthorStore();
 const authorsBooksStore = useAuthorBookStore();
 
 const columns: QTableColumn[] = [
-  { name: 'id', label: 'ID', align: 'left', field: 'id', sortable: true },
-  { name: 'name', label: 'Name', align: 'left', field: 'name', sortable: true },
-  {  name: 'books', label: 'Libro(s)', align: 'left', 
+  { name: 'id', label: 'ID', align: 'center', field: 'id', sortable: true },
+  { name: 'name', label: 'Name', align: 'center', field: 'name', sortable: true },
+  {  name: 'books', label: 'Libro(s)', align: 'center', 
       field: (row: Author) => {
         return booksStore.books
              ?.map(book => {

@@ -1,12 +1,12 @@
 <template>
   <q-page>
-        <q-btn
-          v-if="!seeComponent"
-          @click="seeComponent = true"
-          label="Nuevo Libro"
-          color="primary"
-          flat
-        />
+    <q-btn
+      v-if="!seeComponent"
+      @click="seeComponent = true"
+      label="Nuevo Libro"
+      color="primary"
+      style="margin: 25px;"
+    />
     <BookCardComponent
       v-if="isEditing && seeComponent"
       :book="currentBook"
@@ -19,12 +19,20 @@
       @submit="handleSubmit"
       @cancel="handleCancel"
     />
-    <q-table v-if="booksStore.books"
+    <q-table
+      v-if="booksStore.books"
       :rows="booksStore.books"
       :columns="columns"
       row-key="id"
       @row-click="handleRowClick"
-    />
+    >
+      <template v-slot:body-cell-actions="props">
+        <q-td :props="props">
+          <q-btn color="green" icon="add" @click.stop="console.log('Añadir nuevo autor a ' + props.row.title)"></q-btn>
+          <q-btn color="red" icon="remove" @click.stop="console.log('Eliminar un autor de ' + props.row.title)" style="margin-left: 10px;"></q-btn>
+        </q-td>
+      </template>
+    </q-table>
   </q-page>
 </template>
 
@@ -42,10 +50,11 @@ const booksStore = useBooksStore();
 const authorsStore = useAuthorStore();
 const authorsBooksStore = useAuthorBookStore();
 
+
 const columns: QTableColumn[] = [
-  { name: 'id', label: 'ID', align: 'left', field: 'id', sortable: true },
-  { name: 'title', label: 'Título', align: 'left', field: 'title', sortable: true },
-  {  name: 'authors', label: 'Autor(es)', align: 'left', 
+  { name: 'id', label: 'ID', align: 'center', field: 'id', sortable: true },
+  { name: 'title', label: 'Título', align: 'center', field: 'title', sortable: true },
+  {  name: 'authors', label: 'Autor(es)', align: 'center', 
       field: (row: Book) => {
         return authorsStore.authors
              ?.map(author => {
@@ -58,7 +67,8 @@ const columns: QTableColumn[] = [
              .filter((name): name is string => name !== undefined)
              .join(', ') || 'Anónimo';
       }
-  }
+  }, 
+  { name: 'actions', align: 'center',  label: 'Acciones con autores',  field: ''},
 ];
 
 let seeComponent = ref(false);
