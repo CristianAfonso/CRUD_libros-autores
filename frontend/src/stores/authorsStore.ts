@@ -14,7 +14,7 @@ export const useAuthorStore = defineStore('authors', {
       this.error = null;
 
       try {
-        const response = await api.get<Author[]>('http://localhost:3000/authors');
+        const response = await api.get<Author[]>('/authors');
         this.authors = response.data;
       } catch (err) {
         this.error = 'Error al cargar los autores';

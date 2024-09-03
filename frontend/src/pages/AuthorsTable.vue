@@ -34,7 +34,7 @@ import AuthorCardComponent from '../components/AuthorCardComponent.vue';
 import { Author } from '../components/models';
 import { useAuthorStore } from '../stores/authorsStore';
 import { QTableColumn } from 'quasar';
-import axios from 'axios';
+import api from 'axios';
 
 const authorStore = useAuthorStore();
 
@@ -56,9 +56,9 @@ function handleRowClick(evt: Event, row: Author) {
 async function handleSubmit(author: Author) {
   try {
     if (isEditing.value) {
-      await axios.put(`http://localhost:3000/authors/${author.id}`, author);
+      await api.put(`/authors/${author.id}`, author);
     } else {
-      await axios.post('http://localhost:3000/authors', author);
+      await api.post('/authors', author);
     }
     handleClose();
   } catch (error) {
@@ -67,7 +67,7 @@ async function handleSubmit(author: Author) {
 }
 async function handleDelete(author: Author){
   try{
-    await axios.delete(`http://localhost:3000/authors/${author.id}`);
+    await api.delete(`/authors/${author.id}`);
     handleClose();
   } catch (error) {
     console.error(error);

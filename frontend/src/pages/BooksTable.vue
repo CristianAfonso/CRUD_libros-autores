@@ -34,7 +34,7 @@ import BookCardComponent from '../components/BookCardComponent.vue';
 import { Book } from '../components/models';
 import { useBooksStore } from '../stores/booksStore';
 import { QTableColumn } from 'quasar';
-import axios from 'axios';
+import api from 'axios';
 
 const booksStore = useBooksStore();
 
@@ -56,9 +56,9 @@ function handleRowClick(evt: Event, row: Book) {
 async function handleSubmit(book: Book) {
   try {
     if (isEditing.value) {
-      await axios.put(`http://localhost:3000/books/${book.id}`, book);
+      await api.put(`/books/${book.id}`, book);
     } else {
-      await axios.post('http://localhost:3000/books', book);
+      await api.post('/books', book);
     }
     handleClose();
   } catch (error) {
@@ -67,7 +67,7 @@ async function handleSubmit(book: Book) {
 }
 async function handleDelete(book: Book){
   try{
-    await axios.delete(`http://localhost:3000/books/${book.id}`);
+    await api.delete(`/books/${book.id}`);
     handleClose();
   } catch (error) {
     console.error(error);

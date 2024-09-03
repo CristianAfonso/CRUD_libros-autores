@@ -48,6 +48,7 @@ import { onBeforeMount, ref} from 'vue';
 import { useAuthorStore } from '../stores/authorsStore';
 import { Author, Book } from '../components/models';
 import { useBooksStore } from '../stores/booksStore';
+import api from 'axios'
 
 defineOptions({
   name: 'MainLayout'
@@ -76,6 +77,7 @@ function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 onBeforeMount(async () => {
+  console.log(api)
   await booksStore.fetchBooks();
   books.value = booksStore.books;
   await authorsStore.fetchAuthors();

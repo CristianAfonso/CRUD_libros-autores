@@ -14,7 +14,7 @@ export const useBooksStore = defineStore('books', {
       this.error = null;
 
       try {
-        const response = await api.get<Book[]>('http://localhost:3000/books');
+        const response = await api.get<Book[]>('/books');
         this.books = response.data;
       } catch (err) {
         this.error = 'Error al cargar los libros';
