@@ -6,7 +6,7 @@ export async function getAllRelationships() {
         return await db.select().from(book_author);
     } catch (error) {
         console.error('Error al obtener todos los autores relacionados con libros:', error);
-        throw new Error('Error al obtener todos los libros');
+        throw new Error(`Error al obtener todos los libros: ${error}`);
     }
 }
 export async function addAuthorToBook(book_id: number, author_id: number): Promise<void> {
@@ -14,7 +14,7 @@ export async function addAuthorToBook(book_id: number, author_id: number): Promi
         await db.insert(book_author).values({ book_id, author_id });
     } catch (error) {
         console.error('Error al asociar el autor con el libro:', error);
-        throw new Error('Error al asociar el autor con el libro');
+        throw new Error(`Error al asociar el autor con el libro: ${error}`);
     }
 }
 export async function deleteAuthorFromBook(book_id: number, author_id: number): Promise<void> {
@@ -26,7 +26,7 @@ export async function deleteAuthorFromBook(book_id: number, author_id: number): 
     }
     } catch (error) {
         console.error('Error al eliminar la relación:', error);
-        throw new Error('Error al eliminar la relación');
+        throw new Error(`Error al eliminar la relación: ${error}`);
     }
 }
 export async function getAuthorsOfBook(book_id: number) {
@@ -38,6 +38,6 @@ export async function getAuthorsOfBook(book_id: number) {
             .where(eq(book.id, book_id));
     } catch (error) {
         console.error('Error al obtener autores del libro:', error);
-        throw new Error('Error al obtener autores del libro');
+        throw new Error(`Error al obtener autores del libro: ${error}`);
     }
 }

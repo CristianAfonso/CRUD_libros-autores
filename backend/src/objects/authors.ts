@@ -1,13 +1,13 @@
 import { eq } from 'drizzle-orm';
 import db from '../database';
-import { book_author, author } from '../schema';
+import { author } from '../schema';
 
 export async function createAuthor(name: string): Promise<void> {
     try {
         await db.insert(author).values({ name });
     } catch (error) {
         console.error('Error al crear el autor:', error);
-        throw new Error('Error al crear el autor');
+        throw new Error(`Error al crear el autor: ${error}`);
     }
 }
 
@@ -20,7 +20,7 @@ export async function getAuthorById(author_id: number) {
         return result[0];
     } catch (error) {
         console.error('Error al obtener el autor:', error);
-        throw new Error('Error al obtener el autor');
+        throw new Error(`Error al obtener el autor: ${error}`);
     }
 }
 
@@ -29,7 +29,7 @@ export async function getAllAuthors() {
         return await db.select().from(author);
     } catch (error) {
         console.error('Error al obtener todos los autors:', error);
-        throw new Error('Error al obtener todos los autors');
+        throw new Error(`Error al obtener todos los autors: ${error}`);
     }
 }
 
@@ -41,7 +41,7 @@ export async function updateAuthor(author_id: number, newTitle: string): Promise
         }
     } catch (error) {
         console.error('Error al actualizar el autor:', error);
-        throw new Error('Error al actualizar el autor');
+        throw new Error(`Error al actualizar el autor: ${error}`);
     }
 }
 
@@ -53,6 +53,6 @@ export async function deleteAuthor(author_id: number): Promise<void> {
         }
     } catch (error) {
         console.error('Error al eliminar el autor:', error);
-        throw new Error('Error al eliminar el autor');
+        throw new Error(`Error al eliminar el autor: ${error}`);
     }
 }

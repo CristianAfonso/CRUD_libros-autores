@@ -25,6 +25,11 @@
       row-key="id"
       @row-click="handleRowClick"
     />
+    <ErrorDialogComponent v-if="showErrorDialog"
+      :errorMessage="errorMessage"
+      :showErrorDialog="showErrorDialog"
+      @close="handleCloseError"
+    />
   </q-page>
 </template>
 
@@ -36,7 +41,9 @@ import { useBooksStore } from '../stores/booksStore';
 import { useAuthorStore } from '../stores/authorsStore';
 import { useAuthorBookStore } from '../stores/authors_booksStore';
 import { QTableColumn } from 'quasar';
+import ErrorDialogComponent from '../components/ErrorDialogComponent.vue';
 import api from 'axios';
+import axios from 'axios';
 
 const booksStore = useBooksStore();
 const authorsStore = useAuthorStore();
@@ -65,6 +72,9 @@ let seeComponent = ref(false);
 const isEditing = ref(false);
 let currentAuthor = ref<Author>();
 
+const showErrorDialog = ref(false);
+let errorMessage = ref<string>('');
+
 function handleRowClick(evt: Event, row: Author) {
   seeComponent.value = true;
   currentAuthor.value = row;
@@ -88,8 +98,17 @@ async function handleDelete(author: Author){
     await api.delete(`/authors/${author.id}`);
     handleClose();
   } catch (error) {
-    console.error(error);
+    showErrorDialog.value = true;
+    if (axios.isAxiosError(error)){
+      errorMessage.value = error.response?.data?.error || 'Error desconocido';
+    }else{
+      errorMessage.value = 'Error inesperado';
+    }
   }
+}
+function handleCloseError(){
+  errorMessage = ref<string>('');
+  showErrorDialog.value = false;
 }
 function handleCancel() {
   seeComponent.value = false;

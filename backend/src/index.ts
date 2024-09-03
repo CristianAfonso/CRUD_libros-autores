@@ -16,13 +16,14 @@ app.get('/', () => ({
   message: 'Bienvenido a la API de CRUD libros y autores',
 }));
 
-// Libros
 app.get('/books', async () => {
   try {
     return await getAllBooks();
   } catch (error) {
-    console.error('Error al obtener todos los libros:', error);
-    return { error: 'Error al obtener todos los libros' };
+    return new Response(
+      JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
   }
 });
 
@@ -30,8 +31,10 @@ app.get('/books/:id', async ({ params: { id } }) => {
   try {
     return await getBookById(Number(id));
   } catch (error) {
-    console.error('Error al obtener el libro:', error);
-    return { error: 'Error al obtener el libro' };
+    return new Response(
+      JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
   }
 });
 
@@ -41,8 +44,10 @@ app.post('/books',
       await createBook(body.title);
       return { message: 'Libro creado con éxito' };
     } catch (error) {
-      console.error('Error al crear el libro:', error);
-      return { error: 'Error al crear el libro' };
+      return new Response(
+        JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } },
+      );
     }
   },
   {
@@ -58,8 +63,10 @@ app.put('/books/:id',
       await updateBook(Number(id), body.title);
       return { message: 'Libro actualizado con éxito' };
     } catch (error) {
-      console.error('Error al actualizar el libro:', error);
-      return { error: 'Error al actualizar el libro' };
+      return new Response(
+        JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } },
+      );
     }
   },
   {
@@ -74,14 +81,22 @@ app.delete('/books/:id', async ({ params: { id } }) => {
     await deleteBook(Number(id));
     return { message: 'Libro eliminado con éxito' };
   } catch (error) {
-    console.error('Error al eliminar el libro:', error);
-    return { error: 'Error al eliminar el libro' };
+    return new Response(
+      JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
   }
 });
 
 app.get('/books/:id/authors', async ({ params: { id } }) => {
-  const authors = await getAuthorsOfBook(Number(id));
-  return authors;
+  try{
+    return await getAuthorsOfBook(Number(id));
+  }catch (error){
+    return new Response(
+      JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
+  }
 });
 
 
@@ -91,8 +106,10 @@ app.get('/authors', async () => {
   try {
     return await getAllAuthors();
   } catch (error) {
-    console.error('Error al obtener todos los autores:', error);
-    return { error: 'Error al obtener todos los autores' };
+    return new Response(
+      JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
   }
 });
 
@@ -100,8 +117,10 @@ app.get('/authors/:id', async ({ params: { id } }) => {
   try {
     return await getAuthorById(Number(id));
   } catch (error) {
-    console.error('Error al obtener el autor:', error);
-    return { error: 'Error al obtener el autor' };
+    return new Response(
+      JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
   }
 });
 
@@ -111,8 +130,10 @@ app.post('/authors',
       await createAuthor(body.name);
       return { message: 'Autor creado con éxito' };
     } catch (error) {
-      console.error('Error al crear el autor:', error);
-      return { error: 'Error al crear el autor' };
+      return new Response(
+        JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } },
+      );
     }
   },
   {
@@ -128,8 +149,10 @@ app.put('/authors/:id',
       await updateAuthor(Number(id), body.name);
       return { message: 'Autor actualizado con éxito' };
     } catch (error) {
-      console.error('Error al actualizar el autor:', error);
-      return { error: 'Error al actualizar el autor' };
+      return new Response(
+        JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } },
+      );
     }
   },
   {
@@ -144,8 +167,10 @@ app.delete('/authors/:id', async ({ params: { id } }) => {
     await deleteAuthor(Number(id));
     return { message: 'Autor eliminado con éxito' };
   } catch (error) {
-    console.error('Error al eliminar el autor:', error);
-    return { error: 'Error al eliminar el autor' };
+    return new Response(
+      JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
   }
 });
 
@@ -155,8 +180,10 @@ app.post('/book/:book_id/author/:author_id',
       await addAuthorToBook(Number(book_id), Number(author_id));
       return { message: 'Autor asociado al libro con éxito' };
     } catch (error) {
-      console.error('Error al asociar el autor con el libro:', error);
-      return { error: 'Error al asociar el autor con el libro ' + error };
+      return new Response(
+        JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } },
+      );
     }
   }
 );
@@ -166,8 +193,10 @@ app.delete('/book/:book_id/author/:author_id',
       await deleteAuthorFromBook(Number(book_id), Number(author_id));
       return { message: 'Asociación entre autor y libro eliminada con éxito' };
     } catch (error) {
-      console.error('Error al eliminar la asociación entre el autor y el libro:', error);
-      return { error: 'Error al eliminar la asociación entre el autor y el libro' };
+      return new Response(
+        JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+        { status: 500, headers: { 'Content-Type': 'application/json' } },
+      );
     }
   }
 );
@@ -176,8 +205,10 @@ app.get('/relationships', async () => {
   try {
     return await getAllRelationships();
   } catch (error) {
-    console.error('Error al obtener todas las relaciones:', error);
-    return { error: 'Error al obtener todas las relaciones' };
+    return new Response(
+      JSON.stringify({ error: `ESTE MENSAJE DE ERROR ES SOLO PARA UN ENTORNO DE PRUEBAS -> ${error}` }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
+    );
   }
 });
 

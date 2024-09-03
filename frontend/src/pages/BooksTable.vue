@@ -2,13 +2,13 @@
   <q-page>
     <q-btn
       v-if="!editBook"
-      @click="editBook = true"
+      @click=" handleCancel(); editBook = true;"
       label="Nuevo Libro"
       color="primary"
       style="margin: 25px;"
     />
     <BooksAuthorsCardComponent 
-      v-if="changeAuthor"
+      v-if="changeAuthor && currentBook"
       :book="currentBook"
       :isAdding="isAdding"
       @submit="handleSubmitNewAuthor"
@@ -36,6 +36,11 @@
         </q-td>
       </template>
     </q-table>
+    <ErrorDialogComponent v-if="showErrorDialog"
+      :errorMessage="errorMessage"
+      :showErrorDialog="showErrorDialog"
+      @close="handleCloseError"
+    />
   </q-page>
 </template>
 
@@ -48,12 +53,13 @@ import { useBooksStore } from '../stores/booksStore';
 import { useAuthorStore } from '../stores/authorsStore';
 import { useAuthorBookStore } from '../stores/authors_booksStore';
 import { QTableColumn } from 'quasar';
+import ErrorDialogComponent from '../components/ErrorDialogComponent.vue';
 import api from 'axios';
+import axios from 'axios';
 
 const booksStore = useBooksStore();
 const authorsStore = useAuthorStore();
 const authorsBooksStore = useAuthorBookStore();
-
 
 const columns: QTableColumn[] = [
   { name: 'id', label: 'ID', align: 'center', field: 'id', sortable: true },
@@ -77,24 +83,30 @@ const columns: QTableColumn[] = [
 
 let editBook = ref(false);
 let changeAuthor = ref(false);
+
+const showErrorDialog = ref(false);
 const isEditing = ref(false);
 const isAdding = ref(false);
 
+let errorMessage = ref<string>('');
 let currentBook = ref<Book>();
 
 function handleRowClick(evt: Event, row: Book) {
+  handleCancel();
   editBook.value = true;
   currentBook.value = row;
   isEditing.value = true;
 }
 
 function handleAddAuthor(book: Book){
+  handleCancel();
   currentBook.value = book;
   isAdding.value = true;
   changeAuthor.value = true;
 }
 
-function handleRemoveAuthor(book: Book){
+function handleRemoveAuthor(book: Book){ 
+  handleCancel();
   currentBook.value = book;
   isAdding.value = false;
   changeAuthor.value = true;
@@ -117,7 +129,12 @@ async function handleDelete(book: Book){
     await api.delete(`/books/${book.id}`);
     handleClose();
   } catch (error) {
-    console.error(error);
+    showErrorDialog.value = true;
+    if (axios.isAxiosError(error)){
+      errorMessage.value = error.response?.data?.error || 'Error desconocido';
+    }else{
+      errorMessage.value = 'Error inesperado';
+    }
   }
 }
 async function handleSubmitNewAuthor(author_book: AuthorBook) {
@@ -135,8 +152,17 @@ async function handleDeleteAuthor(author_book: AuthorBook) {
     await api.delete(`/book/${author_book.book_id}/author/${author_book.author_id}/`);
     handleClose();
   } catch (error) {
-    console.error(error);
+    showErrorDialog.value = true;
+    if (axios.isAxiosError(error)){
+      errorMessage.value = error.response?.data?.error || 'Error desconocido';
+    }else{
+      errorMessage.value = 'Error inesperado';
+    }
   }
+}
+function handleCloseError(){
+  errorMessage = ref<string>('');
+  showErrorDialog.value = false;
 }
 function handleCancel() {
   editBook.value = false;

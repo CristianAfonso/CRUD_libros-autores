@@ -4,4 +4,3 @@ Es necesario leer el archivo readme.md de la carpeta Backend.
 
 Iniciar el frontend desde la carpeta correspondiente con: quasar dev
 Iniciar el backend desde la carpeta correspondiente con: bun runs rc/index.ts
-

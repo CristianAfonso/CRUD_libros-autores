@@ -1,13 +1,13 @@
 import { eq } from 'drizzle-orm';
 import db from '../database';
-import { book, book_author, author } from '../schema';
+import { book } from '../schema';
 
 export async function createBook(title: string): Promise<void> {
     try {
         await db.insert(book).values({ title });
     } catch (error) {
         console.error('Error al crear el libro:', error);
-        throw new Error('Error al crear el libro');
+        throw new Error(`Error al crear el libro: ${error}`);
     }
 }
 
@@ -20,7 +20,7 @@ export async function getBookById(book_id: number) {
         return result;
     } catch (error) {
         console.error('Error al obtener el libro:', error);
-        throw new Error('Error al obtener el libro');
+        throw new Error(`Error al obtener el libro: ${error}`);
     }
 }
 
@@ -29,7 +29,7 @@ export async function getAllBooks() {
         return await db.select().from(book);
     } catch (error) {
         console.error('Error al obtener todos los libros:', error);
-        throw new Error('Error al obtener todos los libros');
+        throw new Error(`Error al obtener todos los libros: ${error}`);
     }
 }
 
@@ -41,7 +41,7 @@ export async function updateBook(book_id: number, newTitle: string): Promise<voi
         }
     } catch (error) {
         console.error('Error al actualizar el libro:', error);
-        throw new Error('Error al actualizar el libro');
+        throw new Error(`Error al actualizar el libro: ${error}`);
     }
 }
 
@@ -53,7 +53,7 @@ export async function deleteBook(book_id: number): Promise<void> {
         }
     } catch (error) {
         console.error('Error al eliminar el libro:', error);
-        throw new Error('Error al eliminar el libro');
+        throw new Error(`Error al eliminar el libro: ${error}`);
     }
 }
 
